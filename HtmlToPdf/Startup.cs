@@ -33,11 +33,6 @@ namespace HtmlToPdf
             }
 
             app.UseMvcWithDefaultRoute();
-
-            //app.run(async (context) =>
-            //{
-            //    await context.response.writeasync("hello world!");
-            //});
         }
     }
 }
