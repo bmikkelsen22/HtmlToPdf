@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,25 +25,43 @@ namespace HtmlToPdf
         [HttpGet]
         public FileContentResult Index()
         {
-            var html = "<div>Hi</div>";
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
-                    ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Landscape,
+                    Orientation = Orientation.Portrait,
                     PaperSize = PaperKind.A4
                 },
                 Objects = {
-                    new ObjectSettings() {
-                        PagesCount = true,
-                        HtmlContent = html,
-                        WebSettings = { DefaultEncoding = "utf-8" },
-                        HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
+                    new ObjectSettings()
+                    {
+                        Page = "http://sampleitems.smarterbalanced.org/BrowseItems/"
                     }
                 }
             };
 
             var pdf = converter.Convert(doc);
+            return File(pdf, "application/pdf");
+        }
+
+        [HttpGet("item")]
+        public async Task<FileContentResult> Item(string[] ids)
+        {
+            string message = await ItemRepo.GetItemHtml(ids);
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4
+                },
+                Objects = {
+                    new ObjectSettings()
+                    {
+                        HtmlContent = message
+                    }
+                }
+            };
+            byte[] pdf = converter.Convert(doc);
+
             return File(pdf, "application/pdf");
         }
     }

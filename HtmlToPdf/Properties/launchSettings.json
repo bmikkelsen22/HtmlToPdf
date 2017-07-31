@@ -22,6 +22,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:25401"
+    },
+    "Kestrel": {
+      "commandName": "Project",
+      "launchUrl": "pdf",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
     }
   }
 }
