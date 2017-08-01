@@ -51,12 +51,13 @@ namespace HtmlToPdf
             {
                 GlobalSettings = {
                     Orientation = Orientation.Portrait,
-                    PaperSize = PaperKind.A4
+                    PaperSize = PaperKind.A4,
                 },
                 Objects = {
                     new ObjectSettings()
                     {
-                        HtmlContent = message
+                        HtmlContent = message,
+                        IncludeInOutline = true
                     }
                 }
             };

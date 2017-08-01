@@ -18,18 +18,11 @@
     "HtmlToPdf": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "pdf/item/?ids=I-187-1437",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:25401"
-    },
-    "Kestrel": {
-      "commandName": "Project",
-      "launchUrl": "pdf",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:5000"
     }
   }
 }
