@@ -7,6 +7,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.IO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -57,7 +58,12 @@ namespace HtmlToPdf
                     new ObjectSettings()
                     {
                         HtmlContent = message,
-                        IncludeInOutline = true
+                        IncludeInOutline = true,
+                        WebSettings = new WebSettings()
+                        {
+                            UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "Public", "ItemStyles.css"),
+                            EnableIntelligentShrinking = false
+                        }
                     }
                 }
             };

@@ -22,7 +22,7 @@ namespace HtmlToPdf
 
             XElement linkEl = new XElement("link");
             linkEl.SetAttributeValue("rel", "stylesheet");
-            linkEl.SetAttributeValue("href", "http://ivs.smarterbalanced.org/irisstyles/universal/items.css");
+            linkEl.SetAttributeValue("href", "./ItemStyles.css");
 
             XElement headEl = new XElement("head", metaEl, linkEl);
             XElement bodyEl = new XElement("body", XElement.Parse(htmlString));

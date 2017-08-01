@@ -1,0 +1,12 @@
+﻿body {
+    font-family:'Times New Roman', Times, serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, tx, td {
+    border: 1px solid black;
+}
+
