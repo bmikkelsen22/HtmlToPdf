@@ -20,18 +20,38 @@ namespace HtmlToPdf
             XElement metaEl = new XElement("meta");
             metaEl.SetAttributeValue("charset", "utf-8");
 
-            XElement linkEl = new XElement("link");
-            linkEl.SetAttributeValue("rel", "stylesheet");
-            linkEl.SetAttributeValue("href", "./ItemStyles.css");
-
-            XElement headEl = new XElement("head", metaEl, linkEl);
+            XElement headEl = new XElement("head", metaEl);
             XElement bodyEl = new XElement("body", XElement.Parse(htmlString));
-            bodyEl.Descendants().Where(e => e.Name.LocalName == "a").Remove();
+
+            RemoveHyperlinks(bodyEl);
+            MakeLinksExternal(bodyEl);
 
             XElement htmlElement = new XElement("html", headEl, bodyEl);
 
             string html = htmlElement.ToString();
             return html;
+        }
+
+        static private void MakeLinksExternal(XElement bodyElement)
+        {
+            var sources = bodyElement.Descendants().Where(e =>
+            {
+                if (e.Attribute("src") != null && e.Attribute("src").Value != null)
+                {
+                    return e.Attribute("src").Value.StartsWith("/");
+                }
+                return false;
+            });
+            foreach (XElement sourceElement in sources)
+            {
+                string src = "http://ivs.smarterbalanced.org" + sourceElement.Attribute("src").Value;
+                sourceElement.SetAttributeValue("src", src);
+            }
+        }
+
+        static private void RemoveHyperlinks(XElement bodyElement)
+        {
+            bodyElement.Descendants().Where(e => e.Name.LocalName == "a").Remove();
         }
     }
 }

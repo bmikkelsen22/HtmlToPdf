@@ -61,7 +61,7 @@ namespace HtmlToPdf
                         IncludeInOutline = true,
                         WebSettings = new WebSettings()
                         {
-                            UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "Public", "ItemStyles.css"),
+                            UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "ItemStyles.css"),
                             EnableIntelligentShrinking = false
                         }
                     }

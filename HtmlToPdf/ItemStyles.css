@@ -1,0 +1,11 @@
+﻿body {
+    font-family:'Times New Roman', Times, serif;
+}
+
+.optionContent {
+    display:inline-block;
+}
+
+p {
+    margin: 5px 0px;
+}
