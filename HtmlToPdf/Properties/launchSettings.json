@@ -18,7 +18,7 @@
     "HtmlToPdf": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "pdf/item/?ids=I-187-1437",
+      "launchUrl": "pdf/itemjs/?id=187-3246",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

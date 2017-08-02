@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using HtmlAgilityPack;
 
 namespace HtmlToPdf
 {
@@ -13,6 +14,7 @@ namespace HtmlToPdf
         static public string GetHtml(string fromString)
         {
             XDocument xml = XDocument.Parse(fromString);
+
             XElement xmlHtmlElement = xml.Root.Element("content").Element("html");
             var cData = (XCData)xmlHtmlElement.DescendantNodes().Where(n => n.NodeType == XmlNodeType.CDATA).FirstOrDefault();
             var htmlString = cData.Value;
@@ -52,6 +54,37 @@ namespace HtmlToPdf
         static private void RemoveHyperlinks(XElement bodyElement)
         {
             bodyElement.Descendants().Where(e => e.Name.LocalName == "a").Remove();
+        }
+
+        static public string ParseHtmlJS(string fromString)
+        {
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(fromString);
+
+            MakeLinksExternal(htmlDoc);
+
+            string htmlString = htmlDoc.DocumentNode.WriteTo();
+            return htmlString;
+        }
+
+        static private void MakeLinksExternal(HtmlDocument htmlDoc)
+        {
+            ExternalLinkHelper(htmlDoc, attributeName: "src");
+            ExternalLinkHelper(htmlDoc, attributeName: "source");
+            ExternalLinkHelper(htmlDoc, attributeName: "href");
+        }
+
+        static private void ExternalLinkHelper(HtmlDocument htmlDoc, string attributeName)
+        {
+            Uri baseUrl = new Uri("http://ivs.smarterbalanced.org/");
+            var srcNodes = htmlDoc.DocumentNode.Descendants().Where(n => !String.IsNullOrEmpty(n.GetAttributeValue(attributeName, "")));
+            foreach (HtmlNode node in srcNodes)
+            {
+                string relativeUrl = node.GetAttributeValue(attributeName, "");
+                relativeUrl = relativeUrl.TrimStart('~');
+                Uri url = new Uri(baseUrl, relativeUrl);
+                node.SetAttributeValue(attributeName, url.AbsoluteUri);
+            }
         }
     }
 }

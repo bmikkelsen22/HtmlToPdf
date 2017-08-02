@@ -45,9 +45,9 @@ namespace HtmlToPdf
         }
 
         [HttpGet("item")]
-        public async Task<FileContentResult> Item(string[] ids)
+        public async Task<FileContentResult> Item(string[] id)
         {
-            string message = await ItemRepo.GetItemHtml(ids);
+            string message = await ItemRepo.GetItemHtml(id);
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
@@ -69,6 +69,38 @@ namespace HtmlToPdf
             };
             byte[] pdf = converter.Convert(doc);
 
+            return File(pdf, "application/pdf");
+        }
+
+        [HttpGet("itemjs")]
+        public async Task<FileContentResult> ItemJS(string[] id)
+        {
+            string message = await ItemRepo.GetItemHtmlJS(id);
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4,
+                },
+                Objects = {
+                    new ObjectSettings()
+                    {
+                        HtmlContent = message,
+                        IncludeInOutline = true,
+                        WebSettings = new WebSettings()
+                        {
+                            UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "ItemStyles.css"),
+                            EnableIntelligentShrinking = false,
+                        },
+                        LoadSettings = new LoadSettings()
+                        {
+                            JSDelay = 1000,
+                            StopSlowScript = false
+                        }
+                    }
+                }
+            };
+            byte[] pdf = converter.Convert(doc);
             return File(pdf, "application/pdf");
         }
     }

@@ -9,9 +9,11 @@ namespace HtmlToPdf
 {
     public class ItemRepo
     {
+        private static HttpClient client = new HttpClient();
+
         public static async Task<string> GetItemHtml(string[] itemIds)
         {
-            var client = new HttpClient();
+            
             var items = itemIds.Select(id =>
             {
                 return new { response = "", id = id };
@@ -26,6 +28,19 @@ namespace HtmlToPdf
             HttpResponseMessage response = await client.PostAsync("http://ivs.smarterbalanced.org/Pages/API/content/load", body);
             string message = await response.Content.ReadAsStringAsync();
             string html = ItemHtmlParser.GetHtml(fromString: message);
+            return html;
+        }
+
+        public static async Task<string> GetItemHtmlJS(string[] itemIds)
+        {
+            string url = "http://ivs.smarterbalanced.org/items?";
+            foreach (string id in itemIds) 
+            {
+                url += "ids=" + id;
+            }
+            HttpResponseMessage response = await client.GetAsync(url);
+            string message = await response.Content.ReadAsStringAsync();
+            string html = ItemHtmlParser.ParseHtmlJS(fromString: message);
             return html;
         }
     }
